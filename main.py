@@ -1,3 +1,4 @@
+import json
 from datetime import datetime
 
 # Store all expenses here
@@ -6,7 +7,7 @@ expenses = []
 
 # Function to add an expense
 def add_expense():
-    date = datetime.now().strftime("%d-%m-%Y %H:%M:%S")
+    date = datetime.now().strftime("%d-%m-%Y")
 
     category = input("Enter category (e.g. Food, Transport, Gifts): ")
     description = input("Enter description: ")
@@ -41,8 +42,25 @@ def view_expenses():
             f"₦{expense['amount']:,.2f}"
         )
 
+def save_expenses():
+    with open("expenses.json", "w") as file:
+        json.dump(expenses, file, indent=4)
+
+    print("\nExpenses saved successfully!")
+
+def load_expenses():
+    global expenses
+
+    try:
+        with open ("expenses.json", "r") as file:
+            expenses = json.load(file)
+
+    except FileNotFoundError:
+        expenses = []
 
 # Main program
+load_expenses()
+
 while True:
     print("\n====================================")
     print("      PERSONAL EXPENSE TRACKER")
@@ -55,6 +73,8 @@ while True:
 
     if choice == "1":
         add_expense()
+        save_expenses()
+        print("Expenses added successfully!")
 
     elif choice == "2":
         view_expenses()
