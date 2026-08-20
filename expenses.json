@@ -31,14 +31,14 @@
     },
     {
         "date": "20-08-2026",
-        "category": "gift",
-        "description": "pad",
-        "amount": 34000.0
-    },
-    {
-        "date": "20-08-2026",
         "category": "food",
         "description": "snacks",
         "amount": 500.0
+    },
+    {
+        "date": "20-08-2026",
+        "category": "church",
+        "description": "offfering",
+        "amount": 5000.0
     }
 ]

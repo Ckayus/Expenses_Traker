@@ -99,6 +99,32 @@ def search_expenses():
     if not found:
         print("No expenses found in that category")
 
+def delete_expense():
+    if not expenses:
+        print("There are no expenses to delete.")
+        return
+
+    print("\n========== DELETE EXPENSE ==========")
+
+    for index, expense in enumerate(expenses, start=1):
+        print(f"{index}. {expense['description']}")
+
+    choice = input("Which expense do you want to delete? ")
+
+    if not choice.isdigit():
+        print("Please enter a valid number.")
+        return
+
+    choice = int(choice)
+
+    if choice < 1 or choice > len(expenses):
+        print("Invalid expense number.")
+        return
+
+    deleted_expense = expenses.pop(choice - 1)
+
+    print(f"{deleted_expense['description']} deleted successfully.")
+
 
 # ==============================
 # SAVE EXPENSES
@@ -141,7 +167,8 @@ while True:
     print("2. View Expenses")
     print("3. Calculate Total")
     print("4. Search Expenses")
-    print("5. Exit")
+    print("5. Delete Expense")
+    print("6. Exit")
     print("====================================")
 
     choice = input("Enter your choice: ")
@@ -164,6 +191,9 @@ while True:
         search_expenses()
 
     elif choice == "5":
+        delete_expense()
+
+    elif choice == "6":
 
         print("\nThank you for using the Expense Tracker!")
         break
