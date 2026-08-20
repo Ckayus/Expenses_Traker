@@ -83,6 +83,23 @@ def view_expenses():
     print(f"{'Total Expenses:':<50} ₦{total:,.2f}")
 
 
+def search_expenses():
+    search_category = input("Enter category: ")
+
+    found = False
+
+    for expense in expenses:
+        if expense["category"].lower() == search_category.lower():
+            print(f"Description: {expense['description']}")
+            print(f"Amount: #{expense['amount']:,.2f}")
+            print("_" * 30)
+
+            found = True
+
+    if not found:
+        print("No expenses found in that category")
+
+
 # ==============================
 # SAVE EXPENSES
 # ==============================
@@ -123,7 +140,8 @@ while True:
     print("1. Add Expense")
     print("2. View Expenses")
     print("3. Calculate Total")
-    print("4. Exit")
+    print("4. Search Expenses")
+    print("5. Exit")
     print("====================================")
 
     choice = input("Enter your choice: ")
@@ -143,6 +161,9 @@ while True:
         print(f"\nTotal Expenses = ₦{total:,.2f}")
 
     elif choice == "4":
+        search_expenses()
+
+    elif choice == "5":
 
         print("\nThank you for using the Expense Tracker!")
         break
