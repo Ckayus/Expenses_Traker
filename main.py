@@ -5,13 +5,22 @@ from datetime import datetime
 expenses = []
 
 
-# Function to add an expense
+# ==============================
+# ADD EXPENSE
+# ==============================
 def add_expense():
+    print("\n========== ADD EXPENSE ==========")
+
     date = datetime.now().strftime("%d-%m-%Y")
 
     category = input("Enter category (e.g. Food, Transport, Gifts): ")
     description = input("Enter description: ")
-    amount = float(input("Enter amount: "))
+
+    try:
+        amount = float(input("Enter amount: ₦"))
+    except ValueError:
+        print("Invalid amount. Please enter a number.")
+        return
 
     expense = {
         "date": date,
@@ -22,66 +31,122 @@ def add_expense():
 
     expenses.append(expense)
 
+    # Save immediately after adding
+    save_expenses()
+
     print("\nExpense added successfully!")
 
 
-# Function to view all expenses
+# ==============================
+# CALCULATE TOTAL
+# ==============================
+def calculate_total():
+    total = 0
+
+    for expense in expenses:
+        total += float(expense["amount"])
+
+    return total
+
+
+# ==============================
+# VIEW EXPENSES
+# ==============================
 def view_expenses():
-    if not expenses:
-        print("\nNo expenses found.")
+    print("\n========== ALL EXPENSES ==========")
+
+    if len(expenses) == 0:
+        print("No expenses found.")
         return
 
-    print("\nDate            Category        Description         Amount")
-    print("---------------------------------------------------------------")
+    print(
+        f"{'Date':<15}"
+        f"{'Category':<15}"
+        f"{'Description':<20}"
+        f"{'Amount':>15}"
+    )
+
+    print("-" * 65)
 
     for expense in expenses:
         print(
             f"{expense['date']:<15}"
-            f"{expense['category']:<16}"
+            f"{expense['category']:<15}"
             f"{expense['description']:<20}"
-            f"₦{expense['amount']:,.2f}"
+            f"₦{expense['amount']:>14,.2f}"
         )
 
+    print("-" * 65)
+
+    total = calculate_total()
+
+    print(f"{'Total Expenses:':<50} ₦{total:,.2f}")
+
+
+# ==============================
+# SAVE EXPENSES
+# ==============================
 def save_expenses():
     with open("expenses.json", "w") as file:
         json.dump(expenses, file, indent=4)
 
-    print("\nExpenses saved successfully!")
 
+# ==============================
+# LOAD EXPENSES
+# ==============================
 def load_expenses():
     global expenses
 
     try:
-        with open ("expenses.json", "r") as file:
+        with open("expenses.json", "r") as file:
             expenses = json.load(file)
 
     except FileNotFoundError:
         expenses = []
 
-# Main program
+    except json.JSONDecodeError:
+        print("Warning: expenses.json is corrupted.")
+        expenses = []
+
+
+# ==============================
+# MAIN PROGRAM
+# ==============================
+
 load_expenses()
 
 while True:
+
     print("\n====================================")
-    print("      PERSONAL EXPENSE TRACKER")
+    print("       PERSONAL EXPENSE TRACKER")
     print("====================================")
     print("1. Add Expense")
     print("2. View Expenses")
-    print("3. Exit")
+    print("3. Calculate Total")
+    print("4. Exit")
+    print("====================================")
 
     choice = input("Enter your choice: ")
 
     if choice == "1":
+
         add_expense()
-        save_expenses()
-        print("Expenses added successfully!")
 
     elif choice == "2":
+
         view_expenses()
 
     elif choice == "3":
-        print("Thank you for using the Expense Tracker!")
+
+        total = calculate_total()
+
+        print(f"\nTotal Expenses = ₦{total:,.2f}")
+
+    elif choice == "4":
+
+        print("\nThank you for using the Expense Tracker!")
         break
 
     else:
-        print("Invalid choice. Please try again.")
+
+        print("\nInvalid choice. Please enter 1, 2, 3, or 4.")
