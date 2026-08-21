@@ -151,6 +151,56 @@ def load_expenses():
         print("Warning: expenses.json is corrupted.")
         expenses = []
 
+# ==============================
+# EDIT EXPENSE
+# ==============================
+def edit_expense():
+    if not expenses:
+        print("There are no expenses to edit.")
+        return
+
+    print("\n========== EDIT EXPENSE ==========")
+
+    # Display all expenses with an index
+    for index, expense in enumerate(expenses, start=1):
+        print(f"{index}. [{expense['date']}] {expense['category']} - {expense['description']}: ₦{expense['amount']:,.2f}")
+
+    choice = input("\nWhich expense do you want to edit? ")
+
+    if not choice.isdigit():
+        print("Please enter a valid number.")
+        return
+
+    index = int(choice) - 1
+
+    if index < 0 or index >= len(expenses):
+        print("Invalid expense number.")
+        return
+
+    target_expense = expenses[index]
+
+    print(f"\nEditing: {target_expense['description']}")
+
+    # Get new inputs (press Enter to keep old values optionally, or require new values)
+    category = input("Enter new category: ")
+    description = input("Enter new description: ")
+
+    try:
+        amount = float(input("Enter new amount: ₦"))
+    except ValueError:
+        print("Invalid amount. Edit cancelled.")
+        return
+
+    # Update the dictionary values
+    target_expense["category"] = category
+    target_expense["description"] = description
+    target_expense["amount"] = amount
+
+    # Save changes immediately
+    save_expenses()
+
+    print("\nExpense updated successfully!")
+
 
 # ==============================
 # MAIN PROGRAM
@@ -168,7 +218,8 @@ while True:
     print("3. Calculate Total")
     print("4. Search Expenses")
     print("5. Delete Expense")
-    print("6. Exit")
+    print("6. Edit Expense")
+    print("7. Exit")
     print("====================================")
 
     choice = input("Enter your choice: ")
@@ -194,6 +245,9 @@ while True:
         delete_expense()
 
     elif choice == "6":
+        edit_expense()
+
+    elif choice == "7":
 
         print("\nThank you for using the Expense Tracker!")
         break
