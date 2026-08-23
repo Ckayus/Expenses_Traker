@@ -40,5 +40,17 @@
         "category": "church",
         "description": "Tithe",
         "amount": 6000.0
+    },
+    {
+        "date": "22-08-2026",
+        "category": "transport",
+        "description": "to home",
+        "amount": 1500.0
+    },
+    {
+        "date": "23-08-2026",
+        "category": "Food",
+        "description": "Rice (1 module)",
+        "amount": 2000.0
     }
 ]

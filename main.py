@@ -1,8 +1,28 @@
+
+import os
 import json
 from datetime import datetime
 
 # Store all expenses here
 expenses = []
+
+# ==============================
+# LOAD EXPENSES
+# ==============================
+def load_expenses():
+    global expenses
+
+    try:
+        with open("expenses.json", "r") as file:
+            expenses = json.load(file)
+            #return json.load(file)
+
+    except FileNotFoundError:
+        expenses = []
+
+    except json.JSONDecodeError:
+        print("Warning: expenses.json is corrupted.")
+        expenses = []
 
 
 # ==============================
@@ -53,6 +73,9 @@ def calculate_total():
 # VIEW EXPENSES
 # ==============================
 def view_expenses():
+    if not expenses:
+        print("No Expenses is found.")
+        return
     print("\n========== ALL EXPENSES ==========")
 
     if len(expenses) == 0:
@@ -60,27 +83,29 @@ def view_expenses():
         return
 
     print(
-        f"{'Date':<15}"
-        f"{'Category':<15}"
-        f"{'Description':<20}"
-        f"{'Amount':>15}"
+        f"{'No.:':<5}"
+        f"{'Date':<13}"
+        f"{'Category':<12}"
+        f"{'Description':<17}"
+        f"{'Amount':>5}"
     )
 
-    print("-" * 65)
+    print("-" * 58)
 
-    for expense in expenses:
+    for index, expense in enumerate(expenses, start=1):
         print(
-            f"{expense['date']:<15}"
-            f"{expense['category']:<15}"
-            f"{expense['description']:<20}"
-            f"₦{expense['amount']:>14,.2f}"
+            f"{index:<5}"
+            f"{expense['date']:<13}"
+            f"{expense['category']:<12}"
+            f"{expense['description']:<17}"
+            f"₦{expense['amount']:<5,.2f}"
         )
 
-    print("-" * 65)
+    print("-" * 58)
 
     total = calculate_total()
 
-    print(f"{'Total Expenses:':<50} ₦{total:,.2f}")
+    print(f"{'Total Expenses:':<45} ₦{total:<5,.2f}")
 
 
 def search_expenses():
@@ -134,22 +159,6 @@ def save_expenses():
         json.dump(expenses, file, indent=4)
 
 
-# ==============================
-# LOAD EXPENSES
-# ==============================
-def load_expenses():
-    global expenses
-
-    try:
-        with open("expenses.json", "r") as file:
-            expenses = json.load(file)
-
-    except FileNotFoundError:
-        expenses = []
-
-    except json.JSONDecodeError:
-        print("Warning: expenses.json is corrupted.")
-        expenses = []
 
 # ==============================
 # EDIT EXPENSE
@@ -201,14 +210,85 @@ def edit_expense():
 
     print("\nExpense updated successfully!")
 
+    #===================================
+    #       SORTED BY AMOUNT
+    #===================================
+
+def sort_by_amount():
+    if not expenses:
+        print("No expenses to sort.")
+        return
+
+    sorted_expenses = sorted(
+        expenses,
+        key=lambda expense: float(expense["amount"]),
+        reverse = True
+
+    )
+
+    print("\n============ EXPENSES SORTED BY AMOUNT =========")
+
+    for index, expense in enumerate (sorted_expenses, start=1):
+        print(
+            f"{index:<5}"
+            f"{expense['description']:<20}"
+            f"₦{expense['amount']:<10}"
+        )
+
+
+#===================================
+#       MONTHLY SUMMARY.
+#===================================
+        
+def monthly_summary():
+    if not expenses:
+        print("No expenses available")
+        return
+
+    monthly_totals = {}
+
+    for expense in expenses:
+        month = expense["date"][:7]
+
+        if month not in monthly_totals:
+            monthly_totals[month] = 0
+
+        monthly_totals[month] += expense["amount"]
+
+    print("\n=============MONHLY SUMMARY============")
+
+    for month, total in sorted(monthly_totals.items()):
+        print(f"{month:<10} ₦{total:>15}")
+
+
+# ==============================
+# PAUSE FUNCTION
+# ==============================
+
+def pause():
+    input("\n Press Enter to continue")
+
+
+# ==============================
+# CLEAR SCREEN FUNCTION
+# ==============================
+
+def clear_screen():
+    os.system("cls" if os.name == "nt" else "clear")
 
 # ==============================
 # MAIN PROGRAM
 # ==============================
 
 load_expenses()
+pause()
+
+view_expenses()
+pause()
 
 while True:
+
+    clear_screen()
 
     print("\n====================================")
     print("       PERSONAL EXPENSE TRACKER")
@@ -219,7 +299,9 @@ while True:
     print("4. Search Expenses")
     print("5. Delete Expense")
     print("6. Edit Expense")
-    print("7. Exit")
+    print("7. Monthly Summary")
+    print("8. Sort Expenses by Amount")
+    print("9. Exit")
     print("====================================")
 
     choice = input("Enter your choice: ")
@@ -227,27 +309,42 @@ while True:
     if choice == "1":
 
         add_expense()
+        pause()
 
     elif choice == "2":
 
         view_expenses()
+        pause()
 
     elif choice == "3":
 
         total = calculate_total()
 
         print(f"\nTotal Expenses = ₦{total:,.2f}")
+        pause()
 
     elif choice == "4":
         search_expenses()
+        pause()
+
 
     elif choice == "5":
         delete_expense()
+        pause()
 
     elif choice == "6":
         edit_expense()
+        pause()
 
     elif choice == "7":
+        monthly_summary()
+        pause()
+
+    elif choice == "8":
+        sort_by_amount()
+        pause()
+
+    elif choice == "9":
 
         print("\nThank you for using the Expense Tracker!")
         break
