@@ -183,7 +183,7 @@ app = FastAPI(title="PennyPilot API")
 # Let the Vite development server call this API from the browser.
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:5173"],
+    allow_origins=["https://expenses-traker.vercel.app"],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
