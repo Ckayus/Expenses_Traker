@@ -1,0 +1,59 @@
+
+[
+    {
+        "description": "bought rice and beans",
+        "category": "Food"
+    },
+    {
+        "description": "bought groceries and food",
+        "category": "Food"
+    },
+    {
+        "description": "paid for lunch",
+        "category": "Food"
+    },
+    {
+        "description": "bought bread and milk",
+        "category": "Food"
+    },
+    {
+        "description": "paid for a bus ride",
+        "category": "Transport"
+    },
+    {
+        "description": "bought petrol for my car",
+        "category": "Transport"
+    },
+    {
+        "description": "paid for a taxi",
+        "category": "Transport"
+    },
+    {
+        "description": "paid transport fare",
+        "category": "Transport"
+    },
+    {
+        "description": "paid electricity bill",
+        "category": "Bills"
+    },
+    {
+        "description": "paid water bill",
+        "category": "Bills"
+    },
+    {
+        "description": "paid monthly internet subscription",
+        "category": "Bills"
+    },
+    {
+        "description": "bought new shoes",
+        "category": "Shopping"
+    },
+    {
+        "description": "bought clothes",
+        "category": "Shopping"
+    },
+    {
+        "description": "purchased a new bag",
+        "category": "Shopping"
+    }
+]

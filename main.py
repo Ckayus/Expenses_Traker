@@ -1,15 +1,22 @@
 
+"""Standalone terminal version of the expense tracker.
+
+This older command-line flow reads and writes ``expenses.json`` directly. It
+does not call ``api.py``; the React dashboard instead uses the FastAPI routes.
+"""
+
 import os
 import json
 from datetime import datetime
 
-# Store all expenses here
+# The CLI keeps its current records in memory between loading and saving.
 expenses = []
 
 # ==============================
 # LOAD EXPENSES
 # ==============================
 def load_expenses():
+    """Populate the in-memory list from the JSON file, or start empty."""
     global expenses
 
     try:
@@ -29,6 +36,7 @@ def load_expenses():
 # ADD EXPENSE
 # ==============================
 def add_expense():
+    """Prompt for a new record, append it, then persist the updated list."""
     print("\n========== ADD EXPENSE ==========")
 
     date = datetime.now().strftime("%d-%m-%Y")
@@ -61,6 +69,7 @@ def add_expense():
 # CALCULATE TOTAL
 # ==============================
 def calculate_total():
+    """Sum the amounts currently held in the in-memory expense list."""
     total = 0
 
     for expense in expenses:
@@ -73,6 +82,7 @@ def calculate_total():
 # VIEW EXPENSES
 # ==============================
 def view_expenses():
+    """Print every record in a table followed by the overall total."""
     if not expenses:
         print("No Expenses is found.")
         return
@@ -109,6 +119,7 @@ def view_expenses():
 
 
 def search_expenses():
+    """Print records whose category matches the user's search, ignoring case."""
     search_category = input("Enter category: ")
 
     found = False
@@ -125,6 +136,7 @@ def search_expenses():
         print("No expenses found in that category")
 
 def delete_expense():
+    """Remove the selected record from memory using its displayed list number."""
     if not expenses:
         print("There are no expenses to delete.")
         return
@@ -155,6 +167,7 @@ def delete_expense():
 # SAVE EXPENSES
 # ==============================
 def save_expenses():
+    """Write the in-memory list to the CLI's JSON data file."""
     with open("expenses.json", "w") as file:
         json.dump(expenses, file, indent=4)
 
@@ -164,6 +177,7 @@ def save_expenses():
 # EDIT EXPENSE
 # ==============================
 def edit_expense():
+    """Prompt for replacement values and save them to the selected record."""
     if not expenses:
         print("There are no expenses to edit.")
         return
@@ -215,6 +229,7 @@ def edit_expense():
     #===================================
 
 def sort_by_amount():
+    """Display a separate, highest-to-lowest view without reordering saved data."""
     if not expenses:
         print("No expenses to sort.")
         return
@@ -241,6 +256,7 @@ def sort_by_amount():
 #===================================
         
 def monthly_summary():
+    """Group displayed totals using the first seven characters of each date."""
     if not expenses:
         print("No expenses available")
         return
@@ -266,6 +282,7 @@ def monthly_summary():
 # ==============================
 
 def pause():
+    """Wait for Enter so the user can read output before the screen is cleared."""
     input("\n Press Enter to continue")
 
 
@@ -274,12 +291,14 @@ def pause():
 # ==============================
 
 def clear_screen():
+    """Use the appropriate terminal clear command for the current OS."""
     os.system("cls" if os.name == "nt" else "clear")
 
 # ==============================
 # MAIN PROGRAM
 # ==============================
 
+# Startup loads the file and shows existing records before entering the menu.
 load_expenses()
 pause()
 
@@ -288,6 +307,8 @@ pause()
 
 while True:
 
+    # Each menu choice delegates to one of the operations above; those
+    # operations update the in-memory list and save it when needed.
     clear_screen()
 
     print("\n====================================")
@@ -346,7 +367,7 @@ while True:
 
     elif choice == "9":
 
-        print("\nThank you for using the Expense Tracker!")
+        print("\nThank you for using PennyPilot!")
         break
 
     else:
